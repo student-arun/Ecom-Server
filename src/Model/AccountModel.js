@@ -1,5 +1,5 @@
 require('../db/db');
-const  COLLECTION = require('../db/collection')
+const collection = require("../db/collection")
 const mongoose = require('mongoose');
 
 
@@ -13,7 +13,7 @@ const AccountSchema = mongoose.Schema({
     account_status: {type: Number,default:0}
 })
    
-const AccountSchemaModel = new mongoose.model(COLLECTION.collection.admin,AccountSchema);
+const AccountSchemaModel = new mongoose.model(collection.admin,AccountSchema);
 module.exports = AccountSchemaModel;
 
 

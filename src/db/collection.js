@@ -1,5 +1,7 @@
-exports.collection = {
-    admin: "admin",
+const collection = {
+    admin:"admin",
     category: "category",
-    subcategory: "subcategory"
+    subcategory: "subcategory",
+    product:"product"
 }
+module.exports = collection; 

@@ -7,5 +7,5 @@ const SubCategorySchema = mongoose.Schema({
     CatId: {type: ObjectId} 
 })
 
-const SubCatModel = new mongoose.model(collection.SubCategory,SubCategorySchema)
+const SubCatModel = new mongoose.model(collection.subcategory,SubCategorySchema)
 module.exports = SubCatModel;

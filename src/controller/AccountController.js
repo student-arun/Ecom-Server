@@ -28,7 +28,7 @@ exports.signup = async (req, res) => {
       console.log(error)
       res.json({
         status: "failed",
-        message: "invalid sigup",
+        message: "invalid signup",
       });
     }
   } catch (err) {
@@ -58,7 +58,6 @@ exports.login = async function (req, res, next) {
                 const payload ={
                     name:resData.name,
                     email:resData.email,
-                    userId:resData._id
                 }
                 const userToken = await jwt.sign(payload,SecretKey,{expiresIn:"10d"})
                 res.json({

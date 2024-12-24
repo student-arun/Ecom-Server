@@ -1,13 +1,13 @@
 require("dotenv").config;
-const cat = require("../Model/CategoryModel");
+const cat = require("../Model/CategoryModel")
 const { ObjectId } = require("mongodb");
 exports.addItem = async (req, res, next) => {
   try {
     const itemdata = req.body;
     const addeditemdata = {
-      categoryname: itemdata.categoryname,
-      categorytittle: itemdata.categorytittle,
-      categoryIMG: req.imagePath,
+      CatName: itemdata.CatName,
+      CatTitle: itemdata.CatTitle,
+      // categoryIMG: req.imagePath,
     };
     console.log(addeditemdata);
     const catdata = await cat.create(addeditemdata);
@@ -61,13 +61,14 @@ exports.deleteItem = async (req, res, next) => {
 
 exports.updateitem = async (req, res, next) => {
   try {
-    const updatedata = { Id: req.params.id };
+    const updatedata = { _id: req.params.id };
     const inputdata = {
-      categoryname: req.body.categoryname,
-      categorytittle: req.body.categorytittle,
+      CatName: req.body.CatName,
+      CatTitle: req.body.CatTitle,
     };
     console.log(inputdata);
-    const Idata = await cat.updateOne({ _id: update.Id }, inputdata);
+    const Idata = await cat.updateOne(updatedata , inputdata);
+    console.log(Idata)
 
     if (Idata) {
       res.json({
@@ -79,92 +80,111 @@ exports.updateitem = async (req, res, next) => {
         status: "failed",
         message: "unable to update item",
       });
+    
     }
-
   } catch (err) {
     res.json({
       status: "failed",
       message: "Something went wrong",
       error: err,
+      
     });
+    console.log(err)
   }
 };
 
 // Search item
 
-exports.searchitem=async(req,res,next)=>{
-    const search={item:req.query.search}
-    const find={$or:[{categoryname:{$regex:`^${search.item}`,$options:"i"}},{categorytittle:{$regex:`^${search.item}`,$options:"i"}}]}
-    const items=await Cat.find(find)
-    try{
-        if(items){
-            res.json({
-                status:"success",
-                Message:"Here's the item you were searching for",
-                data:items
-            })
-        }
-        else{
-            res.json({
-                status:"failed",
-                Message:"Can't find the item you are searching for "
-            })
-        }
+exports.searchitem = async (req, res, next) => {
+  const search = { item: req.query.search };
+  const find = {
+    $or: [
+      { categoryname: { $regex: `^${search.item}`, $options: "i" } },
+      { categorytittle: { $regex: `^${search.item}`, $options: "i" } },
+    ],
+  };
+  const items = await at.find(find);
+  try {
+    if (items) {
+      res.json({
+        status: "success",
+        Message: "Here's the item you were searching for",
+        data: items,
+      });
+    } else {
+      res.json({
+        status: "failed",
+        Message: "Can't find the item you are searching for ",
+      });
     }
-    catch(err){
-        res.json({
-            status:"failed",
-            Message:"something went wrong",
-            error:err
-        })
-    }
-    
-}
+  } catch (err) {
+    res.json({
+      status: "failed",
+      Message: "something went wrong",
+      error: err,
+    });
+  }
+};
 
+// exports.searchsubcat = async (req, res, next) => {
+//   try {
+//     const search = { item: req.query.search };
+//     const find = {
+//       $or: [
+//         { sub_catName: { $regex: `^${search.item}`, $options: "i" } },
+//         { sub_catTittle: { $regex: `^${search.item}`, $options: "i" } },
+//       ],
+//     };
 
-exports.searchsubcat = async (req, res, next) => {
-    try {
-    const search = { item: req.query.search }
-    const find = { $or: [{ sub_catName: { $regex: `^${search.item}`, $options: "i" } }, { sub_catTittle: { $regex: `^${search.item}`, $options: "i" } }] }
+//     const SubCat = await sub_cat.find(find);
 
-    const SubCat = await sub_cat.find(find)
- 
-        if (SubCat) {
-            res.json({
-                status: "success",
-                Message: "Here's the item you were searching for",
-                data: SubCat
-            })
-        }
-        else {
-            res.json({
-                status: "failed",
-                Message: "Can't find the item you are searching for "
-            })
-        }
-    }
-    catch (err) {
-        res.json({
-            status: "failed",
-            Message: "something went wrong",
-            error: err
-        })
-    }
-
-}
+//     if (SubCat) {
+//       res.json({
+//         status: "success",
+//         Message: "Here's the item you were searching for",
+//         data: SubCat,
+//       });
+//     } else {
+//       res.json({
+//         status: "failed",
+//         Message: "Can't find the item you are searching for ",
+//       });
+//     }
+//   } catch (err) {
+//     res.json({
+//       status: "failed",
+//       Message: "something went wrong",
+//       error: err,
+//     });
+//   }
+// };
 
 // Upload category image
 
-exports.uploadcatimg = async (req, res, next)=> {
+exports.uploadcatimg = async (req, res, next) => {
+  try {
+    const uploadImg = {
+      cat_id: req.body.catid,
+      cat_img1: req.imagePath,
+    };
+    const uploadImage = await cat.create(uploadImg);
+    console.log(uploadImage);
 
-    try{
-        const uploadImg = {
-            cat_id: req.body.catid,
-            cat_img1: req.imagePath
-        } 
-        const uploadImage = await cat.create(uploadImg)
-        console.log(uploadImage);
-        
-
+    if (uploadImage) {
+      res.json({
+        status: "success",
+        message: "Image uploaded successfully",
+      });
+    } else {
+      res.json({
+        status: "failed",
+        message: "Image not uploaded",
+      });
     }
-}
+  } catch (error) {
+    console.log(error);
+    res.json({
+      status: "something went wrong",
+    });
+  }
+};

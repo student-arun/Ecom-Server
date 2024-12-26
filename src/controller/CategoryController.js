@@ -1,5 +1,5 @@
 require("dotenv").config;
-const cat = require("../Model/CategoryModel")
+const CategoryModel = require("../Model/CategoryModel");
 const { ObjectId } = require("mongodb");
 exports.addItem = async (req, res, next) => {
   try {
@@ -10,7 +10,7 @@ exports.addItem = async (req, res, next) => {
       // categoryIMG: req.imagePath,
     };
     console.log(addeditemdata);
-    const catdata = await cat.create(addeditemdata);
+    const catdata = await CategoryModel.create(addeditemdata);
     if (catdata) {
       res.json({
         status: "success",
@@ -36,7 +36,7 @@ exports.deleteItem = async (req, res, next) => {
   try {
     const itemId = req.params.id;
 
-    const deletedItem = await cat.deleteOne({ _id: new ObjectId(itemId) });
+    const deletedItem = await CategoryModel.deleteOne({ _id: new ObjectId(itemId) });
 
     if (deletedItem) {
       res.json({
@@ -67,7 +67,7 @@ exports.updateitem = async (req, res, next) => {
       CatTitle: req.body.CatTitle,
     };
     console.log(inputdata);
-    const Idata = await cat.updateOne(updatedata , inputdata);
+    const Idata = await CategoryModel.updateOne(updatedata , inputdata);
     console.log(Idata)
 
     if (Idata) {
@@ -96,14 +96,15 @@ exports.updateitem = async (req, res, next) => {
 // Search item
 
 exports.searchitem = async (req, res, next) => {
-  const search = { item: req.query.search };
+  const {search} =  req.query;
   const find = {
     $or: [
-      { categoryname: { $regex: `^${search.item}`, $options: "i" } },
-      { categorytittle: { $regex: `^${search.item}`, $options: "i" } },
+      { CatName: { $regex: `^${search}`, $options: "i" } },
+      { CatTitle: { $regex: `^${search}`, $options: "i" } },
     ],
   };
-  const items = await at.find(find);
+  const items = await CategoryModel.find(find);
+  console.log(items)
   try {
     if (items) {
       res.json({
@@ -167,7 +168,7 @@ exports.uploadcatimg = async (req, res, next) => {
       cat_id: req.body.catid,
       cat_img1: req.imagePath,
     };
-    const uploadImage = await cat.create(uploadImg);
+    const uploadImage = await CategoryModel.create(uploadImg);
     console.log(uploadImage);
 
     if (uploadImage) {

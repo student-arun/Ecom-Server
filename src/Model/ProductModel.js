@@ -24,7 +24,7 @@ const mongoose = require('mongoose')
 {timestamps: true})
 
 
-const ProductModel = new mongoose.model(collection.product.Productschema)
+const ProductModel = new mongoose.model(collection.product,Productschema)
 module.exports = ProductModel;
 
 

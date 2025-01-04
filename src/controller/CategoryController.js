@@ -36,7 +36,7 @@ exports.deleteItem = async (req, res, next) => {
   try {
     const itemId = req.params.id;
 
-    const deletedItem = await CategoryModel.deleteOne({ _id: new ObjectId(itemId) });
+    const deletedItem = await CategoryModel.deleteOne({ _id:new ObjectId(itemId) });
 
     if (deletedItem) {
       res.json({
@@ -67,10 +67,10 @@ exports.updateitem = async (req, res, next) => {
       CatTitle: req.body.CatTitle,
     };
     console.log(inputdata);
-    const Idata = await CategoryModel.updateOne(updatedata , inputdata);
-    console.log(Idata)
+    const resData = await CategoryModel.updateOne(updatedata , inputdata);
+    console.log(resData)
 
-    if (Idata) {
+    if (resData) {
       res.json({
         status: "success",
         message: "Item data updated successfully",

@@ -1,13 +1,11 @@
 const express = require("express");
+const Sub_catrouter = express.Router();
 const upload = require("../middleware/UploadImageMiddleware");
-const { addItem, searchsubcat } = require("../controller/CategoryController");
-const { addsubcat, deletesubcat, updatesubcat } = require("../controller/SubCategoryController");
-const catrouter = express.Router();
+const { addsubcat, searchsubcat,deletesubcat,updatesubcat } = require("../controller/SubCategoryController");
 
+Sub_catrouter.post("/addsubcat",upload.fields([{name: "subcat_img1"}]),addsubcat);
+ Sub_catrouter.delete("/deletesubcat/:id",deletesubcat);
+ Sub_catrouter.put("/updatesubcat/:id",updatesubcat);
+ Sub_catrouter.get("/searchsubcat",searchsubcat)
 
-catrouter.post("/addsubcat",upload.fields([{name: "subcat_img1"}]),addsubcat);
-catrouter.delete("/deletesubcat/:id",deletesubcat);
-catrouter.put("/updatesubcat/:id",updatesubcat);
-catrouter.get("/searchsubcat",searchsubcat)
-
-module.exports = cartrouter;
+module.exports = Sub_catrouter;

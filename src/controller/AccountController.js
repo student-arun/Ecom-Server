@@ -12,7 +12,7 @@ exports.signup = async (req, res) => {
       email: bodyData.email,
       phone: bodyData.phone,
       password: encryptPassword(bodyData.password),
-      accountStatus: bodyData.account_status,
+      //accountStatus: bodyData.account_status,
     };
     console.log(insertData)
 
